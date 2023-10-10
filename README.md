@@ -1,4 +1,4 @@
 # LessBoringLife-LBL-
-A movie recommending app
-Will be updated soon!
+A movie recommending app  
+Install follwoing modules:  
 pip install -r requirements.txt
