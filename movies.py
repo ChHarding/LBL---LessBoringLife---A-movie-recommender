@@ -1,11 +1,12 @@
+import tkinter as tk
+from tkinter import messagebox
+from similar_movies import show_similar_movies
 from tmdbv3api import TMDb, Movie
 import requests
 from PIL import Image, ImageTk
 from io import BytesIO
-import tkinter as tk
-from tkinter import messagebox
 
-def search_movies():
+def search_movies(app, api_key_entry, movie_name_entry):
     tmdb = TMDb()
     tmdb.api_key = api_key_entry.get()
     movie = Movie()
@@ -29,7 +30,9 @@ def search_movies():
     items_per_page = 5
     page = 1
 
-    def display_movies(page):
+    pass
+
+    def display_movies(page, frame):
         for idx, m in enumerate(movie_list[(page - 1) * items_per_page:page * items_per_page]):
             image_url = f"https://image.tmdb.org/t/p/w500{m.poster_path}"
             response = requests.get(image_url)
@@ -40,14 +43,17 @@ def search_movies():
             else:
                 photo = None
 
-            tk.Label(selection_window, text=m.title).grid(row=idx, column=0)
+            tk.Label(frame, text=m.title).grid(row=idx, column=0)
             if photo:
-                label = tk.Label(selection_window, image=photo)
+                label = tk.Label(frame, image=photo)
                 label.image = photo  # Keeping a reference to the image
                 label.grid(row=idx, column=1)
-            tk.Button(selection_window, text="Select", command=lambda m=m: show_similar_movies(m.id)).grid(row=idx, column=2)
+            tk.Button(selection_window, text="Select", command=lambda movie_id=m.id: show_similar_movies(app, api_key_entry, movie_name_entry, movie_id)).grid(row=idx, column=2)
 
         if len(movie_list) > page * items_per_page:
-            tk.Button(selection_window, text="Next", command=lambda: display_movies(page + 1)).grid(row=items_per_page, column=1)
+            tk.Button(selection_window, text="Next", command=lambda: display_movies(page + 1, frame)).grid(row=items_per_page, column=1)
 
-    display_movies(page)
+    display_movies(page, selection_window)
+
+ 
+    
