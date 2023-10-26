@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-from tmdb_helper import search_movies
+from movies import search_movies
 
 # Initializing the Tkinter app
 app = tk.Tk()
@@ -20,6 +20,6 @@ movie_name_entry = tk.Entry(app, width=50)
 movie_name_entry.pack()
 
 # Run the main loop for the application
-search_button = tk.Button(app, text="Search Movies", command=search_movies)
+search_button = tk.Button(app, text="Search Movies", command=lambda: search_movies(app, api_key_entry, movie_name_entry))
 search_button.pack()
 app.mainloop()
