@@ -5,10 +5,11 @@ from tmdbv3api import TMDb, Movie
 import requests
 from PIL import Image, ImageTk
 from io import BytesIO
+from Key import TMDB_API_Key
 
-def search_movies(app, api_key_entry, movie_name_entry):
+def search_movies(app, movie_name_entry):
     tmdb = TMDb()
-    tmdb.api_key = api_key_entry.get()
+    tmdb.api_key = TMDB_API_Key
     movie = Movie()
     try:
         movies = movie.search(movie_name_entry.get())
@@ -48,7 +49,7 @@ def search_movies(app, api_key_entry, movie_name_entry):
                 label = tk.Label(frame, image=photo)
                 label.image = photo  # Keeping a reference to the image
                 label.grid(row=idx, column=1)
-            tk.Button(selection_window, text="Select", command=lambda movie_id=m.id: show_similar_movies(app, api_key_entry, movie_name_entry, movie_id)).grid(row=idx, column=2)
+            tk.Button(selection_window, text="Select", command=lambda movie_id=m.id: show_similar_movies(app, movie_id)).grid(row=idx, column=2)
 
         if len(movie_list) > page * items_per_page:
             tk.Button(selection_window, text="Next", command=lambda: display_movies(page + 1, frame)).grid(row=items_per_page, column=1)
