@@ -5,8 +5,9 @@ from tmdbv3api import TMDb, Movie
 import requests
 from PIL import Image, ImageTk
 from io import BytesIO
+from Key import TMDB_API_Key
 
-def show_similar_movies(app, api_key_entry, movie_name_entry, movie_id):
+def show_similar_movies(app, movie_id):
     year_range_window = tk.Toplevel(app)
     year_range_window.geometry("400x200")
     year_range_window.title("Year Range")
@@ -28,12 +29,12 @@ def show_similar_movies(app, api_key_entry, movie_name_entry, movie_id):
     end_year_entry = tk.Entry(year_range_window, width=30)
     end_year_entry.pack()
 
-    search_button = tk.Button(year_range_window, text="Search", command=lambda movie_id=movie_id: fetch_similar_movies(app, api_key_entry, movie_name_entry, movie_id, start_year_entry.get(), end_year_entry.get()))
+    search_button = tk.Button(year_range_window, text="Search", command=lambda: fetch_similar_movies(app, movie_id, start_year_entry.get(), end_year_entry.get()))
     search_button.pack()
     pass
 
 
-def fetch_similar_movies(app, api_key_entry, movie_name_entry, movie_id, start_year, end_year):
+def fetch_similar_movies(app, movie_id, start_year, end_year):
     movie = Movie()
     try:
         similar_movies = movie.similar(movie_id)
