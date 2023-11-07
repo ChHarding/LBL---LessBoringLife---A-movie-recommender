@@ -5,7 +5,6 @@ from tmdbv3api import TMDb, Movie
 import requests
 from PIL import Image, ImageTk
 from io import BytesIO
-from Key import TMDB_API_Key
 
 def show_similar_movies(app, movie_id):
     year_range_window = tk.Toplevel(app)
@@ -49,12 +48,14 @@ def fetch_similar_movies(app, movie_id, start_year, end_year):
         if hasattr(app, 'prev_window') and app.prev_window.winfo_exists():
             app.prev_window.destroy()
 
-        items_per_page = 5
-        page = 1
+        # Displaying the count of results at the top
+        results_label = tk.Label(similar_movies_window, text=f"Displaying {len(filtered_movies)} results:")
+        results_label.pack()
+
         canvas_similar = tk.Canvas(similar_movies_window)
         canvas_similar.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
-        scrollbar_similar = ttk.Scrollbar(similar_movies_window, orient=tk.VERTICAL, command=canvas_similar.yview)
+        scrollbar_similar = tk.Scrollbar(similar_movies_window, orient="vertical", command=canvas_similar.yview)
         scrollbar_similar.pack(side=tk.RIGHT, fill=tk.Y)
 
         canvas_similar.configure(yscrollcommand=scrollbar_similar.set)
@@ -63,32 +64,36 @@ def fetch_similar_movies(app, movie_id, start_year, end_year):
         frame_similar = tk.Frame(canvas_similar)
         canvas_similar.create_window((0, 0), window=frame_similar, anchor="nw")
 
+        display_similar_movies(frame_similar, filtered_movies)  # Call the function to display movies
 
-        def display_similar_movies(page, frame_similar):
-            for idx, m in enumerate(filtered_movies[(page - 1) * items_per_page:page * items_per_page]):
-                if m.poster_path:
-                    image_url = f"https://image.tmdb.org/t/p/w500{m.poster_path}"
-                    response = requests.get(image_url)
-                if response.status_code == 200:
-                    image = Image.open(BytesIO(response.content))
-                    image = image.resize((150, 225))
-                    photo = ImageTk.PhotoImage(image)
-                    label = tk.Label(frame_similar, text=f"{m.title} ({m.release_date[:4]}) - {m.overview[:100]}")
-                    label.image = photo  # Keeping a reference to the image
-                    label.grid(row=idx, column=0)
-                    image_label = tk.Label(frame_similar, image=photo)
-                    image_label.image = photo  # Keeping a reference to the image
-                    image_label.grid(row=idx, column=1)
-                else:
-                    tk.Label(frame_similar, text=f"{m.title} ({m.release_date[:4]}) - {m.overview[:100]}").grid(row=idx, column=0)
+    except requests.exceptions.RequestException as e:
+        messagebox.showerror("Error", f"An error occurred: {e}")
 
-            if len(filtered_movies) > page * items_per_page:
-                tk.Button(frame_similar, text="Next", command=lambda: display_similar_movies(page + 1, frame_similar)).grid(row=items_per_page, column=1)
+def display_similar_movies(frame_similar, filtered_movies):
+    for idx, m in enumerate(filtered_movies):
+        movie_frame = tk.Frame(frame_similar, padx=10, pady=10)
+        movie_frame.grid(row=idx, column=0, sticky='nw', pady=10)
 
-        display_similar_movies(page, frame_similar)
+        if m.poster_path:
+            image_url = f"https://image.tmdb.org/t/p/w500{m.poster_path}"
+            response = requests.get(image_url)
+            if response.status_code == 200:
+                image = Image.open(BytesIO(response.content))
+                image = image.resize((100, 150))  # Smaller size for layout purposes
+                photo = ImageTk.PhotoImage(image)
+                image_label = tk.Label(movie_frame, image=photo)
+                image_label.image = photo  # Keep a reference to the image
+                image_label.grid(row=0, column=0, rowspan=2)  # Poster occupies two rows
 
-    except requests.exceptions.HTTPError:
-        messagebox.showerror("Error", "Something went wrong. Please try again.")
+        title_year = f"{m.title} ({m.release_date[:4]})"
+        title_label = tk.Label(movie_frame, text=title_year, font=("Arial", 12, "bold"))
+        title_label.grid(row=0, column=1, sticky='w')
 
+        # Text widget for the movie's overview
+        overview_text = tk.Text(movie_frame, height=4, width=50, wrap='word', padx=5, pady=5)
+        overview_text.insert('1.0', m.overview)
+        overview_text.config(state='disabled', bg=movie_frame.cget('bg'), relief='flat', highlightthickness=0)
+        overview_text.grid(row=1, column=1, sticky='w')
+    
 
     pass
