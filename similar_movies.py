@@ -44,13 +44,13 @@ def fetch_similar_movies(app, movie_id, start_year, end_year):
         similar_movies_window.title("Similar Movies")
         app.withdraw()  # Hide the main window
 
-        # Close the previous window
-        if hasattr(app, 'prev_window') and app.prev_window.winfo_exists():
-            app.prev_window.destroy()
+        # Save a reference to the year range window before hiding the main app window
+        year_range_window = app.prev_window
+        app.withdraw()
 
         # Displaying the count of results at the top
-        results_label = tk.Label(similar_movies_window, text=f"Displaying {len(filtered_movies)} results:")
-        results_label.pack()
+        results_label = tk.Label(similar_movies_window, text=f"Displaying {len(filtered_movies)} Similar Movies:")
+        results_label.pack(anchor='w')  # Left align the 'Displaying results' label
 
         canvas_similar = tk.Canvas(similar_movies_window)
         canvas_similar.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
@@ -60,6 +60,14 @@ def fetch_similar_movies(app, movie_id, start_year, end_year):
 
         canvas_similar.configure(yscrollcommand=scrollbar_similar.set)
         canvas_similar.bind('<Configure>', lambda e: canvas_similar.configure(scrollregion=canvas_similar.bbox("all")))
+
+        def back_to_year_range():
+            similar_movies_window.destroy()  # Close the similar movies window
+            year_range_window.deiconify()   # Show the year range window again
+
+        # Add a 'Back' button at the top of the similar movies window
+        back_button = tk.Button(similar_movies_window, text="Back to Year Range", command=back_to_year_range)
+        back_button.pack()
 
         frame_similar = tk.Frame(canvas_similar)
         canvas_similar.create_window((0, 0), window=frame_similar, anchor="nw")
