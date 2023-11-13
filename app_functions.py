@@ -83,3 +83,4 @@ class MovieFunctions:
         for m in movies:
             self.display_movie(self.scrollable_frame, m, movie_row_index)
             movie_row_index += 1  # Increment row index for each movie
+
