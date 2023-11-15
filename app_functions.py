@@ -19,8 +19,12 @@ class MovieFunctions:
             for widget in self.scrollable_frame.winfo_children():
                 widget.destroy()
 
+            # Display count of all movies found
+            count_label = tk.Label(self.scrollable_frame, text=f"Number of movies found: {len(movie_list)}")
+            count_label.grid(row=0, column=0, sticky='w', pady=(10, 0))
+
             # Display search results
-            for idx, m in enumerate(movie_list):
+            for idx, m in enumerate(movie_list, start=1):  # Note: start index changed to 1
                 self.display_movie(self.scrollable_frame, m, idx, self.show_similar_movies)
         except requests.exceptions.HTTPError:
             tk.messagebox.showerror("Error", "Invalid API Key or movie name. Please try again.")
@@ -33,6 +37,22 @@ class MovieFunctions:
             for widget in self.scrollable_frame.winfo_children():
                 widget.destroy()
             self.display_year_range_filter()
+
+            # Debugging output
+            print(f"Number of similar movies found: {len(self.similar_movies_data)}")
+
+            # Display count of all similar movies found at row=1
+            count_label = tk.Label(self.scrollable_frame, text=f"Number of similar movies found: {len(self.similar_movies_data)}")
+            count_label.grid(row=1, column=0, sticky='w', pady=(10, 0))
+
+            # Start displaying movies from row=2
+            movie_row_index = 2  
+            for m in self.similar_movies_data:
+                self.display_movie(self.scrollable_frame, m, movie_row_index)
+                movie_row_index += 1
+
+            # Refresh the window (optional, try if label is still not visible)
+            self.scrollable_frame.update_idletasks()
 
             self.display_similar_movies(self.similar_movies_data)
         except requests.exceptions.RequestException as e:
@@ -63,24 +83,33 @@ class MovieFunctions:
                 m for m in self.similar_movies_data 
                 if m.release_date and start_year <= int(m.release_date[:4]) <= end_year
             ]
+
+            # Clear everything including the year range frame
+            for widget in self.scrollable_frame.winfo_children():
+                widget.destroy()
+
+            # Re-add the year range frame
+            self.display_year_range_filter()
+
+            # Display the count of filtered movies at row=1
+            count_label = tk.Label(self.scrollable_frame, text=f"Number of filtered movies: {len(filtered_movies)}")
+            count_label.grid(row=1, column=0, sticky='w', pady=(10, 0))
+
+            # Start displaying movies from row=2
+            movie_row_index = 3
+            for m in filtered_movies:
+                self.display_movie(self.scrollable_frame, m, movie_row_index)
+                movie_row_index += 1
+
             self.display_similar_movies(filtered_movies)
+
         except ValueError as e:
             tk.messagebox.showerror("Error", "Invalid input. Please enter valid years.")
 
+
     def display_similar_movies(self, movies):
-        # Clear previous movie results but keep year range filter
-        for widget in self.scrollable_frame.winfo_children():
-            if isinstance(widget, tk.Frame):
-                continue  # Skip the year range frame
-            widget.destroy()
-
-        # Display count of similar movies
-        count_label = tk.Label(self.scrollable_frame, text=f"Number of similar movies found: {len(movies)}")
-        count_label.grid(row=1, column=0, sticky='w', pady=(10, 0))
-
-        # Display similar movies
-        movie_row_index = 2  # Starting index for movie rows, accounting for the year range frame and count label
+        # Start displaying movies from the second row, as the first row is the year range frame
+        movie_row_index = 2  
         for m in movies:
             self.display_movie(self.scrollable_frame, m, movie_row_index)
-            movie_row_index += 1  # Increment row index for each movie
-
+            movie_row_index += 1
