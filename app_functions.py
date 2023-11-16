@@ -1,6 +1,7 @@
 from tmdbv3api import TMDb, Movie
 from Key import TMDB_API_Key
 import tkinter as tk
+from tkinter import messagebox
 import requests
 
 class MovieFunctions:
