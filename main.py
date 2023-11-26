@@ -51,17 +51,22 @@ class MovieApp(tk.Tk, MovieFunctions):
                 photo = ImageTk.PhotoImage(image)
                 image_label = tk.Label(frame, image=photo)
                 image_label.image = photo
-                image_label.grid(row=0, column=0, rowspan=3)
+                image_label.grid(row=0, column=0, rowspan=4)  # Adjust rowspan to accommodate new layout
 
         title_year = f"{movie_data.title} ({movie_data.release_date[:4]})"
         tk.Label(frame, text=title_year, font=("Arial", 12, "bold")).grid(row=0, column=1, sticky='w')
 
-        # Display short description (overview)
-        overview = tk.Label(frame, text=movie_data.overview, wraplength=400)
-        overview.grid(row=1, column=1, sticky='w')
+        # Display TMDb rating directly under the title
+        tmdb_rating = movie_data.vote_average  # Assuming you have the TMDb rating in movie_data
+        tmdb_rating_label = tk.Label(frame, text=f"TMDb Rating: {tmdb_rating}")
+        tmdb_rating_label.grid(row=1, column=1, sticky='w')  # Change this to row 1
+
+        # Display short description (overview) after the rating
+        overview = tk.Label(frame, text=movie_data.overview, wraplength=400, anchor='w', justify='left')
+        overview.grid(row=2, column=1, sticky='w')  # Change this to row 2
 
         if command:
-            tk.Button(frame, text="Show Similar", command=lambda: command(movie_data.id)).grid(row=2, column=1)
+            tk.Button(frame, text="Show Similar", command=lambda: command(movie_data.id)).grid(row=3, column=1)  # Adjust to row 3
 
 # Run the application
 if __name__ == "__main__":
