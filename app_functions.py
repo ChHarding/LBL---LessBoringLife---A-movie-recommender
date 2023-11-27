@@ -106,7 +106,15 @@ class MovieFunctions:
         except ValueError as e:
             tk.messagebox.showerror("Error", "Invalid input. Please enter valid years.")
 
+    def add_to_playlist(self, movie):
+        if not hasattr(self, 'playlist'):
+            self.playlist = []
 
+        movie_info = {'id': movie.id, 'title': movie.title, 'year': movie.release_date[:4]}
+        if movie_info not in self.playlist:
+            self.playlist.append(movie_info)
+            self.update_playlist_display()  # Refresh the playlist display
+            
     def display_similar_movies(self, movies):
         # Start displaying movies from the second row, as the first row is the year range frame
         movie_row_index = 2  
