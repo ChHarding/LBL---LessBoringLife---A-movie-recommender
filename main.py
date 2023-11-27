@@ -35,8 +35,31 @@ class MovieApp(tk.Tk, MovieFunctions):
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
 
+        # Playlist Frame
+        self.playlist_frame = tk.Frame(self, width=200)
+        self.playlist_frame.pack(side='right', fill='y')
+
+        # Title for the Playlist Frame
+        playlist_title = tk.Label(self.playlist_frame, text="Your Playlist", font=("Arial", 12, "bold"))
+        playlist_title.pack()
+
+        # Frame for the movie entries in the playlist
+        self.playlist_movies_frame = tk.Frame(self.playlist_frame)
+        self.playlist_movies_frame.pack(fill='both', expand=True)
+
+        # Pack the main content
         self.canvas.pack(side="left", fill="both", expand=True)
-        self.scrollbar.pack(side="right", fill="y")
+        self.scrollbar.pack(side="right", fill='y')
+
+    def update_playlist_display(self):
+        # Clear the current content of the movies frame in the playlist
+        for widget in self.playlist_movies_frame.winfo_children():
+            widget.destroy()
+
+        # Display movies in the playlist
+        for movie_info in self.playlist:
+            movie_label = tk.Label(self.playlist_movies_frame, text=f"{movie_info['title']} ({movie_info['year']})")
+            movie_label.pack()
 
     def display_movie(self, parent, movie_data, row, command=None):
         frame = tk.Frame(parent, padx=10, pady=10)
@@ -65,6 +88,10 @@ class MovieApp(tk.Tk, MovieFunctions):
         overview = tk.Label(frame, text=movie_data.overview, wraplength=400, anchor='w', justify='left')
         overview.grid(row=2, column=1, sticky='w')  # Change this to row 2
 
+        # Add 'Add to Playlist' Button
+        add_to_playlist_btn = tk.Button(frame, text="Add to Playlist", command=lambda: self.add_to_playlist(movie_data))
+        add_to_playlist_btn.grid(row=4, column=1)
+        
         if command:
             tk.Button(frame, text="Show Similar", command=lambda: command(movie_data.id)).grid(row=3, column=1)  # Adjust to row 3
 
