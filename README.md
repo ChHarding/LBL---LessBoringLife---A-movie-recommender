@@ -19,7 +19,7 @@ This Python-based application uses the TMDb API to provide information about mov
    ```
    pip install -r requirements.txt
    ```
-4. Insert your TMDb API key in `Key.py`.
+4. Insert your TMDb API key in `Key.py`. To have a TMDB API, you need to go to https://www.themoviedb.org/signup, and create an account. and from https://www.themoviedb.org/settings/api get your API key. Enter your API key in `Key.py`.
 
 ## Usage Guidelines
 - Execute `main.py` to launch the application.
