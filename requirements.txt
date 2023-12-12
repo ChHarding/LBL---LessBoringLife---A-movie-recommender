@@ -1,5 +1,5 @@
-fuzzywuzzy==0.18.0
-ipywidgets==7.7.1
-tmdbv3api==1.7.6
-IPython==7.27.0
-requests==2.26.0
+fuzzywuzzy >= 0.18.0
+ipywidgets >= 7.7.1
+tmdbv3api >= 1.7.6
+IPython >= 7.27.0
+requests >= 2.26.0
