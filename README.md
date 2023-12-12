@@ -27,13 +27,25 @@ This Python-based application uses the TMDb API to provide information about mov
 -<img src="https://github.com/MeliZiba/LBL---LessBoringLife---A-movie-recommender/assets/145093756/c084425b-a48e-4c50-894d-81bc718dab38" width="800" height="600">
 - Enter the name of the desired movie.
 - <img src="https://github.com/MeliZiba/LBL---LessBoringLife---A-movie-recommender/assets/145093756/31dbe62d-c696-44c3-b14b-52b618046c79"  width="350" height="70">
+- Erro handling for invalid entry or no results:
+- <img src="https://github.com/MeliZiba/LBL---LessBoringLife---A-movie-recommender/assets/145093756/4aca7a83-bbcb-4568-9d1e-2c1f2d578544"  width="800" height="600">
 - From the result page, choose the intended movie, and press show similar button to see a list of similar movies.
 - <img src="https://github.com/MeliZiba/LBL---LessBoringLife---A-movie-recommender/assets/145093756/02e5500e-cf9d-4f7f-bf8f-a3c0ed313893" width="120" height="70">
+- A list of movies similar to the choosen one will be shown:
+- <img src="https://github.com/MeliZiba/LBL---LessBoringLife---A-movie-recommender/assets/145093756/9327dc56-b615-4cd0-850d-8eda2753924d"  width="800" height="600">
+
+- Use Add to Playlist button to add the movie to your playlist.
+- <img src="https://github.com/MeliZiba/LBL---LessBoringLife---A-movie-recommender/assets/145093756/4ccf20c6-74c9-41b3-80fc-3bd5e6ea4dd7" width="90" height="40">
+- On the right side of the app, the "Your Playlist" section will include the movies that are added to playlist:
+- <img src="https://github.com/MeliZiba/LBL---LessBoringLife---A-movie-recommender/assets/145093756/1d859436-bcc2-48fc-905d-0ec1f1f68e87"  width="800" height="600">
 
 - Filter the result range by entering the deisred year range.
 - <img src="https://github.com/MeliZiba/LBL---LessBoringLife---A-movie-recommender/assets/145093756/d6b31a71-820d-49e9-aa47-8b83c6b293d7" width="350" height="70">
-- Use Add to Playlist button to add the movie to your playlist.
-- <img src="https://github.com/MeliZiba/LBL---LessBoringLife---A-movie-recommender/assets/145093756/4ccf20c6-74c9-41b3-80fc-3bd5e6ea4dd7" width="90" height="40">
+- If one or both entries are blank or not numerical a message box will pop up to show the error:
+- <img src="https://github.com/MeliZiba/LBL---LessBoringLife---A-movie-recommender/assets/145093756/d9f441f2-acf8-460d-9049-89fe07554161"  width="800" height="600">
+
+
+
 
 
 ## Contribution Guidelines
