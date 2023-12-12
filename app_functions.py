@@ -1,6 +1,7 @@
 from tmdbv3api import TMDb, Movie
 from Key import TMDB_API_Key
 import tkinter as tk
+from tkinter import messagebox
 import requests
 
 class MovieFunctions:
@@ -19,6 +20,11 @@ class MovieFunctions:
             for widget in self.scrollable_frame.winfo_children():
                 widget.destroy()
 
+            # Check if no movies found
+            if not movie_list:
+                tk.messagebox.showerror("No Results", "No movies found. Please try another search.")
+                return
+
             # Display count of all movies found
             count_label = tk.Label(self.scrollable_frame, text=f"Number of movies found: {len(movie_list)}")
             count_label.grid(row=0, column=0, sticky='w', pady=(10, 0))
@@ -28,6 +34,8 @@ class MovieFunctions:
                 self.display_movie(self.scrollable_frame, m, idx, self.show_similar_movies)
         except requests.exceptions.HTTPError:
             tk.messagebox.showerror("Error", "Invalid API Key or movie name. Please try again.")
+        except Exception as e:
+            tk.messagebox.showerror("Error", f"An unexpected error occurred: Please double check the spelling of the movie name and try again.")
 
     def show_similar_movies(self, movie_id):
         try:
@@ -57,6 +65,25 @@ class MovieFunctions:
             self.display_similar_movies(self.similar_movies_data)
         except requests.exceptions.RequestException as e:
             tk.messagebox.showerror("Error", f"An error occurred: {e}")
+
+    def apply_year_range_filter(self):
+        start_year = self.start_year_entry.get().strip()
+        end_year = self.end_year_entry.get().strip()
+
+        # Check if either entry is blank
+        if not start_year or not end_year:
+            messagebox.showwarning("Warning", "Both year fields must be filled.")
+            return
+
+        # Check if entries are numbers
+        if not start_year.isdigit() or not end_year.isdigit():
+            messagebox.showwarning("Warning", "Year entries must be numbers.")
+            return
+
+        # Convert years to integers
+        start_year = int(start_year)
+        end_year = int(end_year)
+
 
     def display_year_range_filter(self):
         year_range_frame = tk.Frame(self.scrollable_frame)
